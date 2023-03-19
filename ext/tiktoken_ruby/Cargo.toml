@@ -11,4 +11,4 @@ crate-type = ["cdylib"]
 
 [dependencies]
 magnus = { version = "0.4" }
-tiktoken-rs = "0.3.2"
+tiktoken-rs = { git = "https://github.com/IAPark/tiktoken-rs.git" }
