@@ -2,6 +2,7 @@
 name: CI
 
 on:
+  workflow_dispatch: true 
   push:
     tags:
       - "v*"
