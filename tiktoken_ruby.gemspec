@@ -8,12 +8,13 @@ Gem::Specification.new do |spec|
   spec.authors = ["IAPark"]
   spec.email = ["isaac.a.park@gmail.com"]
 
-  spec.summary = "Unofficial Ruby wrapper for Tiktoken by way of Rust"
-  spec.description = "Unofficial Ruby wrapper for Tiktoken by way of Rust"
+  spec.summary = "Ruby wrapper for Tiktoken"
+  spec.description = "Unofficial Ruby wrapper for Tiktoken by way of the unofficial rust bindings"
   spec.homepage = "https://github.com/IAPark/tiktoken_ruby"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 2.6.0"
   spec.required_rubygems_version = ">= 3.3.11"
+  spec.platform = Gem::Platform::RUBY
 
   #spec.metadata["allowed_push_host"] = "TODO: Set to your gem server 'https://example.com'"
 
