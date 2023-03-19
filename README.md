@@ -1,3 +1,4 @@
+[![Gem Version](https://badge.fury.io/rb/tiktoken_ruby.svg)](https://badge.fury.io/rb/tiktoken_ruby)
 # tiktoken_ruby
 
 [Tiktoken](https://github.com/openai/tiktoken) is BPE tokenizer from OpenAI used with their GPT models.
