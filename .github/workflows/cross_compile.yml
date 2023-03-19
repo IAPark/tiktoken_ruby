@@ -2,7 +2,7 @@
 name: CI
 
 on:
-  workflow_dispatch: true 
+  workflow_dispatch:
   push:
     tags:
       - "v*"
