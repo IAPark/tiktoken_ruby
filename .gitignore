@@ -12,6 +12,7 @@
 *.a
 mkmf.log
 target/
+.yardopts
 
 # rspec failure tracking
 .rspec_status
