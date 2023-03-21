@@ -35,7 +35,7 @@ fn init() -> Result<(), Error> {
     let factory_module = module.define_module("BpeFactory")?;
     factory_module.define_singleton_method("r50k_base", function!(r50k_base, 0))?;
     factory_module.define_singleton_method("p50k_base", function!(p50k_base, 0))?;
-    factory_module.define_singleton_method("p50k_base", function!(p50k_edit, 0))?;
+    factory_module.define_singleton_method("p50k_edit", function!(p50k_edit, 0))?;
     factory_module.define_singleton_method("cl100k_base", function!(cl100k_base, 0))?;
 
 
