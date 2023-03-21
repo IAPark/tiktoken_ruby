@@ -9,14 +9,15 @@ Gem::Specification.new do |spec|
   spec.email = ["isaac.a.park@gmail.com"]
 
   spec.summary = "Ruby wrapper for Tiktoken"
-  spec.description = "Unofficial Ruby wrapper for Tiktoken by way of the unofficial rust bindings"
+  spec.description = "An unofficial Ruby wrapper for Tiktoken, " +
+  "a BPE tokenizer written by and used by OpenAI. It can be used to " + 
+  "count the number of tokens in text before sending it to OpenAI APIs."
+  
   spec.homepage = "https://github.com/IAPark/tiktoken_ruby"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 2.6.0"
   spec.required_rubygems_version = ">= 3.1.0"
   spec.platform = Gem::Platform::RUBY
-
-  #spec.metadata["allowed_push_host"] = "TODO: Set to your gem server 'https://example.com'"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/IAPark/tiktoken_ruby"

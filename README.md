@@ -15,11 +15,22 @@ If bundler is not being used to manage dependencies, install the gem by executin
     $ gem install tiktoken_ruby
 
 ## Usage
+Usage should be very similar to the python library. here's a simple example
 
+Encode and decode text
 ```ruby
-encoding = Tiktoken::Encoding.r50k_base
-tokens = encoding.encode("Hello world!")
-puts encoding.decode(tokens)
+require 'tiktoken_ruby'
+
+enc = Tiktoken.get_encoding("cl100k_base")
+enc.decode(enc.encode("hello world")) #=> "hello world"
+```
+
+Encoders can also be retrieved by model name
+```ruby
+require 'tiktoken_ruby'
+
+enc = Tiktoken.encoding_for_model("gpt-4")
+enc.encode("hello world").length #=> 2
 ```
 
 ## Development
