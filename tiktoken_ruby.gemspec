@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.description = "An unofficial Ruby wrapper for Tiktoken, " +
   "a BPE tokenizer written by and used by OpenAI. It can be used to " + 
   "count the number of tokens in text before sending it to OpenAI APIs."
-  
+
   spec.homepage = "https://github.com/IAPark/tiktoken_ruby"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 2.6.0"
@@ -21,6 +21,8 @@ Gem::Specification.new do |spec|
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/IAPark/tiktoken_ruby"
+  spec.metadata["documentation_uri"] = "https://rubydoc.info/github/IAPark/tiktoken_ruby/main"
+  
   #spec.metadata["changelog_uri"] = "TODO: Put your gem's CHANGELOG.md URL here."
 
   # Specify which files should be added to the gem when it is released.
