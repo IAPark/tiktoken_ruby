@@ -10,14 +10,14 @@ RSpec.describe Tiktoken do
   end
 
   it "can get an encoding for a model" do
-    expect(Tiktoken.encoding_for_model('gpt-3.5-turbo')).to be_a(Tiktoken::Encoding)
+    expect(Tiktoken.encoding_for_model("gpt-3.5-turbo")).to be_a(Tiktoken::Encoding)
   end
 
   it "lists available encodings" do
     expect(Tiktoken.list_encoding_names).to be_a(Array)
   end
 
-  for encoding_name in Tiktoken.list_encoding_names
+  Tiktoken.list_encoding_names.each do |encoding_name|
     describe "Encoding #{encoding_name}" do
       let(:encoding) { Tiktoken.get_encoding(encoding_name) }
       describe Tiktoken::Encoding do

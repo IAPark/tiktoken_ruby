@@ -1,1 +1,1 @@
-require 'lib/tiktoken_ruby.rb'
+require "lib/tiktoken_ruby"
