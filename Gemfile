@@ -13,6 +13,5 @@ gem "rb_sys"
 gem "rspec", "~> 3.0"
 
 gem "standard", "~> 1.3"
-gem "pry", "~> 0.14.2"
 
 gem "yard-doctest", "~> 0.1.17"
