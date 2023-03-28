@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.email = ["isaac.a.park@gmail.com"]
 
   spec.summary = "Ruby wrapper for Tiktoken"
-  spec.description = "An unofficial Ruby wrapper for Tiktoken, " +
-  "a BPE tokenizer written by and used by OpenAI. It can be used to " + 
-  "count the number of tokens in text before sending it to OpenAI APIs."
+  spec.description = "An unofficial Ruby wrapper for Tiktoken, " \
+    "a BPE tokenizer written by and used by OpenAI. It can be used to " \
+    "count the number of tokens in text before sending it to OpenAI APIs."
 
   spec.homepage = "https://github.com/IAPark/tiktoken_ruby"
   spec.license = "MIT"
@@ -22,8 +22,8 @@ Gem::Specification.new do |spec|
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/IAPark/tiktoken_ruby"
   spec.metadata["documentation_uri"] = "https://rubydoc.info/github/IAPark/tiktoken_ruby/main"
-  
-  #spec.metadata["changelog_uri"] = "TODO: Put your gem's CHANGELOG.md URL here."
+
+  # spec.metadata["changelog_uri"] = "TODO: Put your gem's CHANGELOG.md URL here."
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.

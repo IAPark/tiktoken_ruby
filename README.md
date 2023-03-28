@@ -43,6 +43,17 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/iapark/tiktoken_ruby.
 
+To get started with development:
+
+```sh
+git clone https://github.com/IAPark/tiktoken_ruby.git
+cd tiktoken_ruby
+bundle install
+bundle exec rake compile
+bundle exec rake spec
+```
+
+
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).

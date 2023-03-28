@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "tiktoken_ruby/version"
-require_relative "tiktoken_ruby/encoding.rb"
+require_relative "tiktoken_ruby/encoding"
 
 begin
   RUBY_VERSION =~ /(\d+\.\d+)/
@@ -12,7 +12,6 @@ end
 
 module Tiktoken
   class << self
-
     # Returns an encoding by name. If the encoding is not already loaded it will be loaded, but otherwise
     # it will reuse the instance of that type that was previous loaded
     # @param name [Symbol|String] The name of the encoding to load
@@ -34,7 +33,7 @@ module Tiktoken
     #   enc = Tiktoken.encoding_for_model("gpt-4")
     #   enc.encode("hello world").length #=> 2
     def encoding_for_model(model_name)
-      for prefix in PREFIX_MODELS
+      PREFIX_MODELS.each do |prefix|
         if model_name.to_s.start_with?("#{prefix}-")
           model_name = prefix
           break
@@ -65,7 +64,7 @@ module Tiktoken
       :r50k_base,
       :p50k_base,
       :p50k_edit,
-      :cl100k_base,
+      :cl100k_base
     ]
 
     # taken from the python library here https://github.com/openai/tiktoken/blob/main/tiktoken/model.py#L13-L53
@@ -80,10 +79,10 @@ module Tiktoken
       "text-curie-001": "r50k_base",
       "text-babbage-001": "r50k_base",
       "text-ada-001": "r50k_base",
-      "davinci": "r50k_base",
-      "curie": "r50k_base",
-      "babbage": "r50k_base",
-      "ada": "r50k_base",
+      davinci: "r50k_base",
+      curie: "r50k_base",
+      babbage: "r50k_base",
+      ada: "r50k_base",
       # code
       "code-davinci-002": "p50k_base",
       "code-davinci-001": "p50k_base",
@@ -106,7 +105,7 @@ module Tiktoken
       "text-search-babbage-doc-001": "r50k_base",
       "text-search-ada-doc-001": "r50k_base",
       "code-search-babbage-code-001": "r50k_base",
-      "code-search-ada-code-001": "r50k_base",
+      "code-search-ada-code-001": "r50k_base"
     }
 
     # these are models that have a versioned models that are otherwise identical

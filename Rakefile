@@ -14,7 +14,6 @@ end
 
 RSpec::Core::RakeTask.new(:spec)
 
-
 task :native, [:platform] do |_t, platform:|
   sh "bundle", "exec", "rb-sys-dock", "--platform", platform, "--build"
 end
