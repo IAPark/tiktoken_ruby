@@ -15,7 +15,7 @@ If bundler is not being used to manage dependencies, install the gem by executin
     $ gem install tiktoken_ruby
 
 ## Usage
-Usage should be very similar to the python library. here's a simple example
+Usage should be very similar to the python library. Here's a simple example
 
 Encode and decode text
 ```ruby
