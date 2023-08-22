@@ -386,8 +386,8 @@ dependencies = [
 
 [[package]]
 name = "tiktoken-rs"
-version = "0.3.2"
-source = "git+https://github.com/IAPark/tiktoken-rs.git#5231fbf4a91d9221a713522e755445d0dde341fa"
+version = "0.5.1"
+source = "git+https://github.com/zurawiki/tiktoken-rs.git#963bc718734c49ae5f2e73adc3e118dddcde6c28"
 dependencies = [
  "anyhow",
  "base64",
