@@ -400,6 +400,7 @@ name = "tiktoken_ruby"
 version = "0.1.0"
 dependencies = [
  "magnus",
+ "rb-sys",
  "tiktoken-rs",
 ]
 
