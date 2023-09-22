@@ -10,5 +10,6 @@ publish = false
 crate-type = ["cdylib"]
 
 [dependencies]
-magnus = { version = "0.4" }
+magnus = { version = "0.6.1" }
+rb-sys = { version = "*", features = ["stable-api-compiled-fallback"] }
 tiktoken-rs = { git = "https://github.com/IAPark/tiktoken-rs.git" }
