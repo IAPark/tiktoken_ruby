@@ -1,7 +1,7 @@
 mod core_bpe_wrapper;
 
 use core_bpe_wrapper::CoreBPEWrapper;
-use magnus::{define_module, function, prelude::*, Error, method, class, RModule, ExceptionClass};
+use magnus::{class, define_module, function, method, prelude::*, Error, ExceptionClass, RModule};
 
 fn r50k_base() -> CoreBPEWrapper {
     let core_bpe = tiktoken_rs::r50k_base().unwrap();
@@ -38,14 +38,18 @@ fn init() -> Result<(), Error> {
     factory_module.define_singleton_method("p50k_edit", function!(p50k_edit, 0))?;
     factory_module.define_singleton_method("cl100k_base", function!(cl100k_base, 0))?;
 
-
     let ext_module = module.define_module("Ext")?;
     let bpe_class = ext_module.define_class("CoreBPE", class::object())?;
 
-    bpe_class.define_method("encode_ordinary", method!(CoreBPEWrapper::encode_ordinary, 1))?;
+    bpe_class.define_method(
+        "encode_ordinary",
+        method!(CoreBPEWrapper::encode_ordinary, 1),
+    )?;
     bpe_class.define_method("encode", method!(CoreBPEWrapper::encode, 2))?;
-    bpe_class.define_method("encode_with_special_tokens", method!(CoreBPEWrapper::encode_with_special_tokens, 1))?;
-
+    bpe_class.define_method(
+        "encode_with_special_tokens",
+        method!(CoreBPEWrapper::encode_with_special_tokens, 1),
+    )?;
 
     bpe_class.define_method("decode", method!(CoreBPEWrapper::decode, 1))?;
     Ok(())
