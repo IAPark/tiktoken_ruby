@@ -18,6 +18,13 @@ task :native, [:platform] do |_t, platform:|
   sh "bundle", "exec", "rb-sys-dock", "--platform", platform, "--build"
 end
 
+namespace :steep do
+  desc "Check RBS signatures"
+  task "check" do
+    sh "bundle", "exec", "steep", "check"
+  end
+end
+
 task build: :compile
 
-task default: %i[compile spec standard]
+task default: %i[compile spec standard steep:check]
