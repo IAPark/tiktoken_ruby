@@ -14,3 +14,5 @@ gem "rspec", "~> 3.0"
 gem "standard", "~> 1.3"
 
 gem "yard-doctest", "~> 0.1.17"
+
+gem "steep", "~> 1.5"

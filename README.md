@@ -2,7 +2,7 @@
 # tiktoken_ruby
 
 [Tiktoken](https://github.com/openai/tiktoken) is BPE tokenizer from OpenAI used with their GPT models.
-This is a wrapper around it aimed primarily at enabling accurate counts of GPT model tokens used. 
+This is a wrapper around it aimed primarily at enabling accurate counts of GPT model tokens used.
 
 ## Installation
 
@@ -32,6 +32,12 @@ require 'tiktoken_ruby'
 enc = Tiktoken.encoding_for_model("gpt-4")
 enc.encode("hello world").length #=> 2
 ```
+
+## RBS support
+
+Tiktoken comes with Ruby type signatures (RBS).
+
+To use them with Steep, add `library "tiktoken_ruby"` to your `Steepfile`.
 
 ## Development
 
