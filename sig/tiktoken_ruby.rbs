@@ -1,4 +1,26 @@
-module TiktokenRuby
+module Tiktoken
   VERSION: String
-  # See the writing guide of rbs: https://github.com/ruby/rbs#guides
+
+  def self.get_encoding: (String) -> (Encoding|nil)
+  def self.encoding_for_model: (String) -> (Encoding|nil)
+  def self.list_encoding_names: () -> Array[Symbol]
+  def self.list_model_names: () -> Array[String|Symbol]
+
+  SUPPORTED_ENCODINGS: Array[Symbol]
+  MODEL_TO_ENCODING_NAME: Hash[(String|Symbol), String]
+  PREFIX_MODELS: Array[String]
+
+  class Encoding
+    def encode: (String) -> Array[String]
+    def initialize: (BpeFactory, String|Symbol) -> (String|Symbol)
+    def self.for_name_cached: (String|Symbol) -> Encoding
+    def self.for_name: (String|Symbol) -> Encoding
+  end
+
+  class BpeFactory
+    def self.r50k_base: (Array[Integer]) -> String
+    def self.p50k_base: (Array[Integer]) -> String
+    def self.p50k_edit: (Array[Integer]) -> String
+    def self.cl100k_base: (Array[Integer]) -> String
+  end
 end
