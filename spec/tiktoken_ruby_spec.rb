@@ -13,6 +13,10 @@ RSpec.describe Tiktoken do
     expect(Tiktoken.encoding_for_model("gpt-3.5-turbo")).to be_a(Tiktoken::Encoding)
   end
 
+  it "can get an encoding for a fine-tuned model" do
+    expect(Tiktoken.encoding_for_model("ft:gpt-3.5-turbo:org:suffix:abc123")).to be_a(Tiktoken::Encoding)
+  end
+
   it "lists available encodings" do
     expect(Tiktoken.list_encoding_names).to be_a(Array)
   end
