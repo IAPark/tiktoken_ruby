@@ -15,8 +15,8 @@ Gem::Specification.new do |spec|
 
   spec.homepage = "https://github.com/IAPark/tiktoken_ruby"
   spec.license = "MIT"
-  spec.required_ruby_version = ">= 2.7.0"
-  spec.required_rubygems_version = ">= 3.1.0"
+  spec.required_ruby_version = ">= 2.5.9"
+  spec.required_rubygems_version = ">= 2.7.6"
   spec.platform = Gem::Platform::RUBY
 
   spec.metadata["homepage_uri"] = spec.homepage
