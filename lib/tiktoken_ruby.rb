@@ -99,6 +99,10 @@ module Tiktoken
       # edit (DEPRECATED)
       "text-davinci-edit-001": "p50k_edit",
       "code-davinci-edit-001": "p50k_edit",
+      # embeddings
+      "text-embedding-ada-002": "cl100k_base",
+      "text-embedding-3-small": "cl100k_base",
+      "text-embedding-3-large": "cl100k_base",
       # old embeddings (DEPRECATED)
       "text-similarity-davinci-001": "r50k_base",
       "text-similarity-curie-001": "r50k_base",
