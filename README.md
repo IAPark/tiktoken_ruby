@@ -4,6 +4,11 @@
 [Tiktoken](https://github.com/openai/tiktoken) is BPE tokenizer from OpenAI used with their GPT models.
 This is a wrapper around it aimed primarily at enabling accurate counts of GPT model tokens used. 
 
+## Request for maintainers
+
+I can't really put substantial time into maintaining this. Probably nothing more than a couple hours every few months. If you have experience maintaining ruby gems and would like to
+lend a hand please send me an email or reply to this [issue](https://github.com/IAPark/tiktoken_ruby/issues/26)
+
 ## Installation
 
 Install the gem and add to the application's Gemfile by executing:
