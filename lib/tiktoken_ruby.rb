@@ -33,17 +33,15 @@ module Tiktoken
     #   enc = Tiktoken.encoding_for_model("gpt-4")
     #   enc.encode("hello world").length #=> 2
     def encoding_for_model(model_name)
-      PREFIX_MODELS.each do |prefix|
-        if model_name.to_s.start_with?("#{prefix}-")
-          model_name = prefix
-          break
-        end
+      if MODEL_TO_ENCODING_NAME.key?(model_name.to_sym)
+        return get_encoding(MODEL_TO_ENCODING_NAME[model_name.to_sym])
       end
 
-      encoding_name = MODEL_TO_ENCODING_NAME[model_name.to_sym]
-      return nil unless encoding_name
-
-      get_encoding(encoding_name)
+      MODEL_PREFIX_TO_ENCODING.each do |prefix, encoding|
+        if model_name.start_with?(prefix.to_s)
+          return get_encoding(encoding)
+        end
+      end
     end
 
     # Lists all the encodings that are supported
@@ -67,12 +65,22 @@ module Tiktoken
       :cl100k_base
     ]
 
-    # taken from the python library here https://github.com/openai/tiktoken/blob/main/tiktoken/model.py#L13-L53
+    # taken from the python library here https://github.com/openai/tiktoken/blob/main/tiktoken/model.py
     # that is also MIT licensed but by OpenAI
     MODEL_TO_ENCODING_NAME = {
+      # chat
       "gpt-4": "cl100k_base",
       "gpt-3.5-turbo": "cl100k_base",
-      # text
+      "gpt-35-turbo": "cl100k_base",  # Azure deployment name
+      # base
+      "davinci-002": "cl100k_base",
+      "babbage-002": "cl100k_base",
+      # embeddings
+      "text-embedding-ada-002": "cl100k_base",
+      "text-embedding-3-small": "cl100k_base",
+      "text-embedding-3-large": "cl100k_base",
+      # DEPRECATED MODELS
+      # text (DEPRECATED)
       "text-davinci-003": "p50k_base",
       "text-davinci-002": "p50k_base",
       "text-davinci-001": "r50k_base",
@@ -83,21 +91,17 @@ module Tiktoken
       curie: "r50k_base",
       babbage: "r50k_base",
       ada: "r50k_base",
-      # code
+      # code (DEPRECATED)
       "code-davinci-002": "p50k_base",
       "code-davinci-001": "p50k_base",
       "code-cushman-002": "p50k_base",
       "code-cushman-001": "p50k_base",
       "davinci-codex": "p50k_base",
       "cushman-codex": "p50k_base",
-      # edit
+      # edit (DEPRECATED)
       "text-davinci-edit-001": "p50k_edit",
       "code-davinci-edit-001": "p50k_edit",
-      # embeddings
-      "text-embedding-ada-002": "cl100k_base",
-      "text-embedding-3-small": "cl100k_base",
-      "text-embedding-3-large": "cl100k_base",
-      # old embeddings
+      # old embeddings (DEPRECATED)
       "text-similarity-davinci-001": "r50k_base",
       "text-similarity-curie-001": "r50k_base",
       "text-similarity-babbage-001": "r50k_base",
@@ -107,10 +111,21 @@ module Tiktoken
       "text-search-babbage-doc-001": "r50k_base",
       "text-search-ada-doc-001": "r50k_base",
       "code-search-babbage-code-001": "r50k_base",
-      "code-search-ada-code-001": "r50k_base"
+      "code-search-ada-code-001": "r50k_base",
+      # open source
+      gpt2: "gpt2"
     }
 
-    # these are models that have a versioned models that are otherwise identical
-    PREFIX_MODELS = ["gpt-4", "gpt-3.5-turbo"]
+    MODEL_PREFIX_TO_ENCODING = {
+      # chat
+      "gpt-4-": "cl100k_base",  # e.g., gpt-4-0314, etc., plus gpt-4-32k
+      "gpt-3.5-turbo-": "cl100k_base",  # e.g, gpt-3.5-turbo-0301, -0401, etc.
+      "gpt-35-turbo-": "cl100k_base",  # Azure deployment name
+      # fine-tuned
+      "ft:gpt-4": "cl100k_base",
+      "ft:gpt-3.5-turbo": "cl100k_base",
+      "ft:davinci-002": "cl100k_base",
+      "ft:babbage-002": "cl100k_base"
+    }
   end
 end
