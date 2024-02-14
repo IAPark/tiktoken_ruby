@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     tiktoken_ruby (0.0.7)
-      rb_sys (>= 0.9.86)
+      rb_sys (= 0.9.87)
 
 GEM
   remote: https://rubygems.org/
@@ -22,7 +22,7 @@ GEM
     rake (13.1.0)
     rake-compiler (1.2.5)
       rake
-    rb_sys (0.9.86)
+    rb_sys (0.9.87)
     regexp_parser (2.9.0)
     rexml (3.2.6)
     rspec (3.12.0)
