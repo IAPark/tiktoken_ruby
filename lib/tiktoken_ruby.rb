@@ -28,7 +28,7 @@ module Tiktoken
 
     # Gets the encoding for an OpenAI model
     # @param model_name [Symbol|String] The name of the model to get the encoding for
-    # @return [Tiktoken::Encoding] The encoding instance
+    # @return [Tiktoken::Encoding, nil] The encoding instance, or nil if no encoding is found
     # @example Count tokens for text
     #   enc = Tiktoken.encoding_for_model("gpt-4")
     #   enc.encode("hello world").length #=> 2
@@ -37,11 +37,10 @@ module Tiktoken
         return get_encoding(MODEL_TO_ENCODING_NAME[model_name.to_sym])
       end
 
-      MODEL_PREFIX_TO_ENCODING.each do |prefix, encoding|
-        if model_name.start_with?(prefix.to_s)
-          return get_encoding(encoding)
-        end
+      _prefix, encoding = MODEL_PREFIX_TO_ENCODING.find do |prefix,_encoding|
+        model_name.start_with?(prefix.to_s)
       end
+      encoding && get_encoding(encoding)
     end
 
     # Lists all the encodings that are supported
