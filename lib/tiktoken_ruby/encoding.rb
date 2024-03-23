@@ -1,6 +1,9 @@
 # frozen_string_literal: true
+require "thread"
 
 class Tiktoken::Encoding
+  MUTEX = Mutex.new
+
   attr_reader :name
 
   # This returns a new Tiktoken::Encoding instance for the requested encoding
@@ -15,8 +18,10 @@ class Tiktoken::Encoding
   # @param encoding [Symbol] The name of the encoding to load
   # @return [Tiktoken::Encoding] The encoding instance
   def self.for_name_cached(encoding)
-    @encodings ||= {}
-    @encodings[encoding.to_sym] ||= Tiktoken::Encoding.for_name(encoding)
+    MUTEX.synchronize do
+      @encodings ||= {}
+      @encodings[encoding.to_sym] ||= Tiktoken::Encoding.for_name(encoding)
+    end
   end
 
   # Encodes the text as a list of integer tokens. This encoding will encode special non text tokens
