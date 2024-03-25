@@ -26,6 +26,7 @@ Encode and decode text
 ```ruby
 require 'tiktoken_ruby'
 
+# note: retrieving an encoding is not currently thread safe until https://github.com/IAPark/tiktoken_ruby/pull/30 is merged
 enc = Tiktoken.get_encoding("cl100k_base")
 enc.decode(enc.encode("hello world")) #=> "hello world"
 ```
