@@ -37,10 +37,13 @@ module Tiktoken
         return get_encoding(MODEL_TO_ENCODING_NAME[model_name.to_sym])
       end
 
-      _prefix, encoding = MODEL_PREFIX_TO_ENCODING.find do |prefix,_encoding|
+      _prefix, encoding = MODEL_PREFIX_TO_ENCODING.find do |prefix, _encoding|
         model_name.start_with?(prefix.to_s)
       end
-      encoding && get_encoding(encoding)
+
+      if encoding
+        get_encoding(encoding)
+      end
     end
 
     # Lists all the encodings that are supported
