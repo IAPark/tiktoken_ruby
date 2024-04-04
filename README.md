@@ -1,8 +1,9 @@
 [![Gem Version](https://badge.fury.io/rb/tiktoken_ruby.svg)](https://badge.fury.io/rb/tiktoken_ruby)
+
 # tiktoken_ruby
 
 [Tiktoken](https://github.com/openai/tiktoken) is BPE tokenizer from OpenAI used with their GPT models.
-This is a wrapper around it aimed primarily at enabling accurate counts of GPT model tokens used. 
+This is a wrapper around it aimed primarily at enabling accurate counts of GPT model tokens used.
 
 ## Request for maintainers
 
@@ -20,18 +21,19 @@ If bundler is not being used to manage dependencies, install the gem by executin
     $ gem install tiktoken_ruby
 
 ## Usage
+
 Usage should be very similar to the python library. Here's a simple example
 
 Encode and decode text
+
 ```ruby
 require 'tiktoken_ruby'
-
-# note: retrieving an encoding is not currently thread safe until https://github.com/IAPark/tiktoken_ruby/pull/30 is merged
 enc = Tiktoken.get_encoding("cl100k_base")
 enc.decode(enc.encode("hello world")) #=> "hello world"
 ```
 
 Encoders can also be retrieved by model name
+
 ```ruby
 require 'tiktoken_ruby'
 
@@ -58,7 +60,6 @@ bundle install
 bundle exec rake compile
 bundle exec rake spec
 ```
-
 
 ## License
 
