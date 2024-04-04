@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Tiktoken::Encoding
-  MUTEX = Mutex.new
+  CACHE_MUTEX = Mutex.new
 
   attr_reader :name
 
@@ -17,7 +17,7 @@ class Tiktoken::Encoding
   # @param encoding [Symbol] The name of the encoding to load
   # @return [Tiktoken::Encoding] The encoding instance
   def self.for_name_cached(encoding)
-    MUTEX.synchronize do
+    CACHE_MUTEX.synchronize do
       @encodings ||= {}
       @encodings[encoding.to_sym] ||= Tiktoken::Encoding.for_name(encoding)
     end
