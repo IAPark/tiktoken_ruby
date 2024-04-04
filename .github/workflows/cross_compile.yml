@@ -1,11 +1,6 @@
 ---
-name: CI
-
-on:
-  workflow_dispatch:
-  push:
-    tags:
-      - "v*"
+name: cross-compile
+on: [push]
 
 jobs:
   ci-data:
