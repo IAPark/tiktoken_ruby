@@ -27,7 +27,9 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.1"
-
+      - name: 'bundle install'
+        shell: bash
+        run: 'bundle install'
       - uses: oxidize-rb/actions/cross-gem@v1
         id: cross-gem
         with:
