@@ -1,11 +1,6 @@
 ---
-name: CI
-
-on:
-  workflow_dispatch:
-  push:
-    tags:
-      - "v*"
+name: cross-compile
+on: [push]
 
 jobs:
   ci-data:
@@ -16,7 +11,8 @@ jobs:
       - uses: oxidize-rb/actions/fetch-ci-data@v1
         id: fetch
         with:
-          supported-ruby-platforms: true
+          supported-ruby-platforms: |
+            exclude: ['aarch64-linux-musl', 'x64-mingw32']
           stable-ruby-versions: |
             exclude: [head]
   cross-gem:
@@ -32,7 +28,9 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.1"
-
+      - name: 'bundle install'
+        shell: bash
+        run: 'bundle install'
       - uses: oxidize-rb/actions/cross-gem@v1
         id: cross-gem
         with:
