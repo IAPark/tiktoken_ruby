@@ -19,6 +19,10 @@ fn cl100k_base() -> CoreBPEWrapper {
     let core_bpe = tiktoken_rs::cl100k_base().unwrap();
     CoreBPEWrapper::new(core_bpe)
 }
+fn o200k_base() -> CoreBPEWrapper {
+    let core_bpe = tiktoken_rs::o200k_base().unwrap();
+    CoreBPEWrapper::new(core_bpe)
+}
 
 fn module() -> Result<RModule, magnus::Error> {
     define_module("Tiktoken")
@@ -37,6 +41,7 @@ fn init() -> Result<(), Error> {
     factory_module.define_singleton_method("p50k_base", function!(p50k_base, 0))?;
     factory_module.define_singleton_method("p50k_edit", function!(p50k_edit, 0))?;
     factory_module.define_singleton_method("cl100k_base", function!(cl100k_base, 0))?;
+    factory_module.define_singleton_method("o200k_base", function!(o200k_base, 0))?;
 
     let ext_module = module.define_module("Ext")?;
     let bpe_class = ext_module.define_class("CoreBPE", class::object())?;
