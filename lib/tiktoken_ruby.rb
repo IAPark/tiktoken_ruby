@@ -64,13 +64,15 @@ module Tiktoken
       :r50k_base,
       :p50k_base,
       :p50k_edit,
-      :cl100k_base
+      :cl100k_base,
+      :o200k_base
     ]
 
     # taken from the python library here https://github.com/openai/tiktoken/blob/main/tiktoken/model.py
     # that is also MIT licensed but by OpenAI
     MODEL_TO_ENCODING_NAME = {
       # chat
+      "gpt-4o": "o200k_base",
       "gpt-4": "cl100k_base",
       "gpt-3.5-turbo": "cl100k_base",
       "gpt-35-turbo": "cl100k_base",  # Azure deployment name
@@ -120,6 +122,7 @@ module Tiktoken
 
     MODEL_PREFIX_TO_ENCODING = {
       # chat
+      "gpt-4o-": "o200k_base",  # e.g., gpt-4o-2024-05-13, etc.
       "gpt-4-": "cl100k_base",  # e.g., gpt-4-0314, etc., plus gpt-4-32k
       "gpt-3.5-turbo-": "cl100k_base",  # e.g, gpt-3.5-turbo-0301, -0401, etc.
       "gpt-35-turbo-": "cl100k_base",  # Azure deployment name
