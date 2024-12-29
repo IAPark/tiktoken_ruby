@@ -8,6 +8,10 @@ updates:
       time: "09:00"
       timezone: "Etc/UTC"
     open-pull-requests-limit: 10
+    groups:
+      github-actions:
+        patterns:
+          - "*"
 
   - package-ecosystem: bundler
     directory: "/"
@@ -17,6 +21,10 @@ updates:
       time: "09:00"
       timezone: "Etc/UTC"
     open-pull-requests-limit: 10
+    groups:
+      bundler-dependencies:
+        patterns:
+          - "*"
 
   - package-ecosystem: cargo
     directory: "/"
@@ -26,3 +34,7 @@ updates:
       time: "09:00"
       timezone: "Etc/UTC"
     open-pull-requests-limit: 10
+    groups:
+      cargo:
+        patterns:
+          - "*"

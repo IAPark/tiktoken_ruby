@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+set -e
+
+if [ -z "${TIKTOKEN_PUBLISH_KEY}" ]; then
+  echo "Error: TIKTOKEN_PUBLISH_KEY is not set. This is the RubyGems API key to push the gem."
+  exit 1
+fi
+
+version=$(grep VERSION lib/tiktoken_ruby/version.rb  | head -n 1 | cut -d'"' -f2)
+echo "Building tiktoken_ruby v$version"
+
+targets=(
+  "arm64-darwin"
+  "x86_64-darwin"
+  "aarch64-linux"
+  "x86_64-linux"
+  "x86_64-linux-musl"
+  "arm-linux"
+  "x64-mingw-ucrt"
+)
+
+for target in "${targets[@]}"; do
+  bundle exec rb-sys-dock -p "$target" --ruby-versions 3.2 --build
+done
+
+for gem in pkg/tiktoken_ruby-"$version"*.gem ; do
+  GEM_HOST_API_KEY="${TIKTOKEN_PUBLISH_KEY}" gem push "$gem" --host https://rubygems.org
+done
+
+# last but not least, the uncompiled gem
+bundle exec rake package
+GEM_HOST_API_KEY="${TIKTOKEN_PUBLISH_KEY}" gem push "pkg/tiktoken_ruby-$version.gem" --host https://rubygems.org
