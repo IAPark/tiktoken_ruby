@@ -21,3 +21,9 @@ end
 task build: :compile
 
 task default: %i[compile spec standard]
+
+# Packaging default (non-precompiled) gem
+require "rubygems/package_task"
+gem_path = Gem::PackageTask.new(GEMSPEC).define
+desc "Package the Ruby gem"
+task "package" => [gem_path]
