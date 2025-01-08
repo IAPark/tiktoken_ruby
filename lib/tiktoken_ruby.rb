@@ -69,9 +69,12 @@ module Tiktoken
     ]
 
     # taken from the python library here https://github.com/openai/tiktoken/blob/main/tiktoken/model.py
-    # that is also MIT licensed but by OpenAI
+    # that is also MIT licensed but by OpenAI;
+    # https://github.com/Congyuwang/tiktoken-rs/blob/main/tiktoken-rs/src/tokenizer.rs#L50
+    # is the source of the mapping for the Rust library
     MODEL_TO_ENCODING_NAME = {
       # chat
+      "chatgpt-4o-latest": "o200k_base",
       "gpt-4o": "o200k_base",
       "gpt-4": "cl100k_base",
       "gpt-3.5-turbo": "cl100k_base",

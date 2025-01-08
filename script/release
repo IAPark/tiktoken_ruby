@@ -7,24 +7,34 @@ if [ -z "${TIKTOKEN_PUBLISH_KEY}" ]; then
   exit 1
 fi
 
-version=$(grep VERSION lib/tiktoken_ruby/version.rb  | head -n 1 | cut -d'"' -f2)
-echo "Building tiktoken_ruby v$version"
-
-targets=(
-  "arm64-darwin"
-  "x86_64-darwin"
-  "aarch64-linux"
-  "x86_64-linux"
-  "x86_64-linux-musl"
-  "arm-linux"
-  "x64-mingw-ucrt"
-)
-
-for target in "${targets[@]}"; do
-  bundle exec rb-sys-dock -p "$target" --ruby-versions 3.2 --build
+run_id=""
+# Parse arguments
+while [[ "$#" -gt 0 ]]; do
+  case $1 in
+    --run-id)
+      run_id="$2"
+      shift 2
+      ;;
+    *)
+      echo "Unknown parameter passed: $1"
+      exit 1
+      ;;
+  esac
 done
 
-for gem in pkg/tiktoken_ruby-"$version"*.gem ; do
+if [ -z "${run_id}" ]; then
+  echo "Error: --run-id is not provided. Please provide the GitHub Action run id for the cross-compile workflow."
+  exit 1
+fi
+
+version=$(grep VERSION lib/tiktoken_ruby/version.rb  | head -n 1 | cut -d'"' -f2)
+echo "Building tiktoken_ruby v$version, using artifacts from run $run_id"
+
+rm -rf pkg/cross-compiled
+gh run download "$run_id" -D pkg/cross-compiled
+
+for gem in pkg/cross-compiled/cross-gem-*/tiktoken_ruby-"$version"*.gem ; do
+  echo "Publishing $gem"
   GEM_HOST_API_KEY="${TIKTOKEN_PUBLISH_KEY}" gem push "$gem" --host https://rubygems.org
 done
 
