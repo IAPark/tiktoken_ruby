@@ -8,7 +8,7 @@ jobs:
     outputs:
       result: ${{ steps.fetch.outputs.result }}
     steps:
-      - uses: oxidize-rb/actions/fetch-ci-data@v1
+      - uses: oxidize-rb/actions/fetch-ci-data@main
         id: fetch
         with:
           supported-ruby-platforms: |
