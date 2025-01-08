@@ -29,5 +29,5 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
   spec.extensions = ["ext/tiktoken_ruby/extconf.rb"]
-  spec.add_dependency "rb_sys", ">= 0.9.87"
+  spec.add_dependency "rb_sys", "0.9.106"
 end
