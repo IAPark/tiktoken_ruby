@@ -17,6 +17,10 @@ RSpec.describe Tiktoken do
     expect(Tiktoken.encoding_for_model("ft:gpt-3.5-turbo:org:suffix:abc123")).to be_a(Tiktoken::Encoding)
   end
 
+  it "can get an encoding for a reasoning model" do
+    expect(Tiktoken.encoding_for_model("o3")).to be_a(Tiktoken::Encoding)
+  end
+
   it "fails gracefully when getting an encoding for an unknown model" do
     expect(Tiktoken.encoding_for_model("bad-model-name")).to be_nil
   end

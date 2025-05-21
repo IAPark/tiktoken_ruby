@@ -27,7 +27,7 @@ impl CoreBPEWrapper {
         let allowed_special: Vec<&str> = allowed_special.iter().map(|s| s.as_str()).collect();
         let allowed_special: HashSet<&str> = HashSet::from_iter(allowed_special.iter().cloned());
 
-        Ok(self.core_bpe.encode(text.as_str(), allowed_special))
+        Ok(self.core_bpe.encode(text.as_str(), &allowed_special).0)
     }
 
     pub fn encode_with_special_tokens(&self, text: String) -> Vec<Rank> {
