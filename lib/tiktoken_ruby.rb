@@ -74,6 +74,7 @@ module Tiktoken
     # is the source of the mapping for the Rust library
     MODEL_TO_ENCODING_NAME = {
       # chat
+      "gpt-4.1": "o200k_base",
       "chatgpt-4o-latest": "o200k_base",
       "gpt-4o": "o200k_base",
       "gpt-4": "cl100k_base",
@@ -125,6 +126,7 @@ module Tiktoken
 
     MODEL_PREFIX_TO_ENCODING = {
       # chat
+      "gpt-4.1-": "o200k_base", # e.g., gpt-4.1-2025-04-14
       "gpt-4o-": "o200k_base",  # e.g., gpt-4o-2024-05-13, etc.
       "gpt-4-": "cl100k_base",  # e.g., gpt-4-0314, etc., plus gpt-4-32k
       "gpt-3.5-turbo-": "cl100k_base",  # e.g, gpt-3.5-turbo-0301, -0401, etc.
