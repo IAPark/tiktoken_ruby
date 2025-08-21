@@ -1,0 +1,79 @@
+FROM ubuntu:20.04
+
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get -y update && \
+    apt-get install -y sudo wget curl git-core build-essential xz-utils unzip dirmngr && \
+    apt-get install -y openjdk-11-jdk-headless maven && \
+    rm -rf /var/lib/apt/lists/*
+
+##
+##  install rbenv and ruby-build
+##
+RUN groupadd -r rubyuser && useradd -r -g rubyuser -G sudo -p "" --create-home rubyuser
+
+ENV RBENV_ROOT=/usr/local/rbenv RBENV_RUBIES="jruby-9.4.0.0"
+
+# chown after running `rbenv init` because that command creates some subdirectories
+RUN git clone https://github.com/rbenv/rbenv.git      ${RBENV_ROOT} && \
+    git clone https://github.com/rbenv/ruby-build.git ${RBENV_ROOT}/plugins/ruby-build && \
+    \
+    echo "export RBENV_ROOT=/usr/local/rbenv" >> /etc/rubybashrc && \
+    echo "export PATH=$RBENV_ROOT/bin:\$PATH" >> /etc/rubybashrc && \
+    $RBENV_ROOT/bin/rbenv init - --no-rehash bash >> /etc/rubybashrc && \
+    echo "source /etc/rubybashrc" >> /etc/bashrc && \
+    echo "source /etc/rubybashrc" >> /etc/bash.bashrc && \
+    \
+    chown -R rubyuser:rubyuser ${RBENV_ROOT} && \
+    find ${RBENV_ROOT} -type d -print0 | sudo xargs -0 chmod g+sw
+ENV BASH_ENV=/etc/rubybashrc
+
+
+##
+##  set up rake-compiler and install bootstrap rubies
+##
+USER rubyuser
+
+# Install the bootstrap rubies
+RUN bash -c " \
+      echo 'gem: --no-ri --no-rdoc --no-document' >> ~/.gemrc && \
+      export CFLAGS='-s -O3 -fno-fast-math -fPIC' && \
+      for v in ${RBENV_RUBIES} ; do \
+        rbenv install \$v -- --disable-install-doc ; \
+      done && \
+      find ${RBENV_ROOT} -type d -print0 | sudo xargs -0 chmod g+w \
+    "
+
+# Install rake-compiler and patch it to build and install static libraries for Linux rubies
+COPY build/patches /home/rubyuser/patches
+RUN bash -c " \
+      for v in ${RBENV_RUBIES} ; do \
+        rbenv shell \$v && \
+        gem install rake-compiler -v1.2.9 && \
+        cd ${RBENV_ROOT}/versions/\$v/lib/ruby/gems/*/gems/rake-compiler-1.2.9 && \
+        for patch in /home/rubyuser/patches/rake-compiler-1.2.9/*.patch ; do \
+          patch -p1 < \$patch ; \
+        done \
+      done \
+    "
+
+# Install rake-compiler's cross rubies in global dir instead of /root
+RUN sudo mkdir -p /usr/local/rake-compiler && \
+    sudo chown rubyuser.rubyuser /usr/local/rake-compiler && \
+    ln -s /usr/local/rake-compiler ~/.rake-compiler
+
+
+USER root
+
+# Install SIGINT forwarder
+COPY build/sigfw.c /root/
+RUN gcc $HOME/sigfw.c -o /usr/local/bin/sigfw
+
+# Install user mapper
+COPY build/runas /usr/local/bin/
+
+# Install sudoers configuration
+COPY build/sudoers /etc/sudoers.d/rake-compiler-dock
+
+RUN bash -c "rbenv global jruby-9.4.0.0"
+
+CMD bash

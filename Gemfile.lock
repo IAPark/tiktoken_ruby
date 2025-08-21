@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     tiktoken_ruby (0.0.11.1)
-      rb_sys (= 0.9.115)
+      rb_sys (~> 0.9)
 
 GEM
   remote: https://rubygems.org/
