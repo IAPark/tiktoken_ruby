@@ -133,6 +133,7 @@ module Tiktoken
       "o3-": "o200k_base",
       "o4-": "o200k_base",
       # chat
+      "gpt-5-": "o200k_base",
       "gpt-4.1-": "o200k_base",
       "chatgpt-4o-": "o200k_base",
       "gpt-4o-": "o200k_base",  # e.g., gpt-4o-2024-05-13, etc.
