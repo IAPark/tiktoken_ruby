@@ -1,7 +1,7 @@
 mod core_bpe_wrapper;
 
 use core_bpe_wrapper::CoreBPEWrapper;
-use magnus::{class, define_module, function, method, prelude::*, Error, ExceptionClass, RModule};
+use magnus::{function, method, prelude::*, Error, ExceptionClass, RModule, Ruby};
 
 fn r50k_base() -> CoreBPEWrapper {
     let core_bpe = tiktoken_rs::r50k_base().unwrap();
@@ -26,11 +26,11 @@ fn o200k_base() -> CoreBPEWrapper {
 }
 
 fn module() -> Result<RModule, magnus::Error> {
-    define_module("Tiktoken")
+    Ruby::get().unwrap().define_module("Tiktoken")
 }
 
 fn uncicode_error() -> Result<ExceptionClass, magnus::Error> {
-    module()?.define_error("UnicodeError", magnus::exception::standard_error())
+    module()?.define_error("UnicodeError", Ruby::get().unwrap().exception_standard_error())
 }
 
 #[magnus::init]
@@ -45,7 +45,7 @@ fn init() -> Result<(), Error> {
     factory_module.define_singleton_method("o200k_base", function!(o200k_base, 0))?;
 
     let ext_module = module.define_module("Ext")?;
-    let bpe_class = ext_module.define_class("CoreBPE", class::object())?;
+    let bpe_class = ext_module.define_class("CoreBPE", Ruby::get().unwrap().class_object())?;
 
     bpe_class.define_method(
         "encode_ordinary",
