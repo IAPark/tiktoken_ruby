@@ -12,4 +12,4 @@ crate-type = ["cdylib"]
 [dependencies]
 magnus = { version = "0.8.2" }
 rb-sys = { version = "0.9.117", features = ["stable-api-compiled-fallback"] }
-tiktoken-rs = { version = "0.7.0" }
+tiktoken-rs = { version = "0.9.0" }
