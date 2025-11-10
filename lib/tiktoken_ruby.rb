@@ -65,7 +65,8 @@ module Tiktoken
       :p50k_base,
       :p50k_edit,
       :cl100k_base,
-      :o200k_base
+      :o200k_base,
+      :o200k_harmony
     ]
 
     # taken from the python library here https://github.com/openai/tiktoken/blob/main/tiktoken/model.py
@@ -143,6 +144,7 @@ module Tiktoken
       "gpt-4-": "cl100k_base",  # e.g., gpt-4-0314, etc., plus gpt-4-32k
       "gpt-3.5-turbo-": "cl100k_base",  # e.g, gpt-3.5-turbo-0301, -0401, etc.
       "gpt-35-turbo-": "cl100k_base",  # Azure deployment name
+      "gpt-oss-": "o200k_harmony",
       # fine-tuned
       "ft:gpt-4o": "cl100k_base",
       "ft:gpt-4": "cl100k_base",

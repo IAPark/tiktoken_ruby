@@ -25,12 +25,20 @@ fn o200k_base() -> CoreBPEWrapper {
     CoreBPEWrapper::new(core_bpe)
 }
 
+fn o200k_harmony() -> CoreBPEWrapper {
+    let core_bpe = tiktoken_rs::o200k_harmony().unwrap();
+    CoreBPEWrapper::new(core_bpe)
+}
+
 fn module() -> Result<RModule, magnus::Error> {
     Ruby::get().unwrap().define_module("Tiktoken")
 }
 
 fn uncicode_error() -> Result<ExceptionClass, magnus::Error> {
-    module()?.define_error("UnicodeError", Ruby::get().unwrap().exception_standard_error())
+    module()?.define_error(
+        "UnicodeError",
+        Ruby::get().unwrap().exception_standard_error(),
+    )
 }
 
 #[magnus::init]
@@ -43,6 +51,7 @@ fn init() -> Result<(), Error> {
     factory_module.define_singleton_method("p50k_edit", function!(p50k_edit, 0))?;
     factory_module.define_singleton_method("cl100k_base", function!(cl100k_base, 0))?;
     factory_module.define_singleton_method("o200k_base", function!(o200k_base, 0))?;
+    factory_module.define_singleton_method("o200k_harmony", function!(o200k_harmony, 0))?;
 
     let ext_module = module.define_module("Ext")?;
     let bpe_class = ext_module.define_class("CoreBPE", Ruby::get().unwrap().class_object())?;
