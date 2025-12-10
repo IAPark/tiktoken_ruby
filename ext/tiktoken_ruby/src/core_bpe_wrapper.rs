@@ -60,7 +60,7 @@ unsafe extern "C" fn encode_special_without_gvl(data: *mut c_void) -> *mut c_voi
 unsafe extern "C" fn decode_without_gvl(data: *mut c_void) -> *mut c_void {
     let data = &mut *(data as *mut DecodeData);
     let core_bpe = &*data.core_bpe;
-    data.result = core_bpe.decode(data.ids.clone()).map_err(|e| e.to_string());
+    data.result = core_bpe.decode(std::mem::take(&mut data.ids)).map_err(|e| e.to_string());
     std::ptr::null_mut()
 }
 
