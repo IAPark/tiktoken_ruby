@@ -40,6 +40,13 @@ class Tiktoken::Encoding
     @ext_base_bpe.encode(text, allowed_special)
   end
 
+  # Encodes the text as a list of integer tokens, including special tokens.
+  # @param text [String] The text to encode
+  # @return [Array<Integer>] The encoded tokens
+  def encode_with_special_tokens(text)
+    @ext_base_bpe.encode_with_special_tokens(text)
+  end
+
   # Decodes the tokens back into text
   # @param tokens [Array<Integer>] The tokens to decode
   # @return [String] The decoded text
