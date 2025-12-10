@@ -36,6 +36,39 @@ enc = Tiktoken.encoding_for_model("gpt-4")
 enc.encode("hello world").length #=> 2
 ```
 
+### Encoding methods
+
+There are three methods for encoding text:
+
+- `encode_ordinary(text)` - Encodes text, always treating special tokens as ordinary text
+- `encode(text, allowed_special: [])` - Encodes text, treating special tokens as text unless listed in `allowed_special`
+- `encode_with_special_tokens(text)` - Encodes text, recognizing and parsing all special tokens
+
+**Special tokens** are control sequences used by OpenAI models, such as `<|endoftext|>`, `<|fim_prefix|>`, `<|fim_middle|>`, and `<|fim_suffix|>`. The encoding methods differ in how they handle these sequences:
+
+```ruby
+enc = Tiktoken.get_encoding("cl100k_base")
+text = "Hello<|endoftext|>World"
+
+# encode_ordinary: treats <|endoftext|> as literal characters (9 tokens)
+enc.encode_ordinary(text)
+#=> [9906, 27, 91, 8862, 728, 428, 91, 29, 10343]
+
+# encode: same as encode_ordinary by default
+enc.encode(text)
+#=> [9906, 27, 91, 8862, 728, 428, 91, 29, 10343]
+
+# encode with allowed_special: recognizes the specified special token (3 tokens)
+enc.encode(text, allowed_special: ["<|endoftext|>"])
+#=> [9906, 100257, 10343]
+
+# encode_with_special_tokens: recognizes ALL special tokens (3 tokens)
+enc.encode_with_special_tokens(text)
+#=> [9906, 100257, 10343]
+```
+
+All methods round-trip correctly through `decode`.
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
