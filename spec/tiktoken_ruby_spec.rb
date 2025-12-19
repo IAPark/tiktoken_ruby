@@ -49,7 +49,48 @@ RSpec.describe Tiktoken do
         it "Encode ordinary tokenizes a string" do
           expect(encoding.encode_ordinary("Hello world!").size).to be(3)
         end
+
+        it "Encode with special tokens tokenizes a string" do
+          expect(encoding.encode_with_special_tokens("Hello world!").size).to be(3)
+        end
+
+        it "Encode with special tokens round trips a string" do
+          tokens = encoding.encode_with_special_tokens("Hello world!")
+          expect(encoding.decode(tokens)).to eq("Hello world!")
+        end
       end
+    end
+  end
+
+  describe "special token handling" do
+    let(:encoding) { Tiktoken.get_encoding("cl100k_base") }
+    let(:text_with_special) { "Hello<|endoftext|>World" }
+
+    it "encode_ordinary treats special tokens as literal text" do
+      tokens = encoding.encode_ordinary(text_with_special)
+      # <|endoftext|> is tokenized character by character, resulting in more tokens
+      expect(tokens.length).to be > 3
+      expect(encoding.decode(tokens)).to eq(text_with_special)
+    end
+
+    it "encode treats special tokens as literal text by default" do
+      tokens = encoding.encode(text_with_special)
+      expect(tokens).to eq(encoding.encode_ordinary(text_with_special))
+    end
+
+    it "encode recognizes special tokens when in allowed_special" do
+      tokens = encoding.encode(text_with_special, allowed_special: ["<|endoftext|>"])
+      # <|endoftext|> becomes a single token, resulting in exactly 3 tokens
+      expect(tokens.length).to eq(3)
+      expect(encoding.decode(tokens)).to eq(text_with_special)
+    end
+
+    it "encode_with_special_tokens recognizes all special tokens" do
+      tokens = encoding.encode_with_special_tokens(text_with_special)
+      # <|endoftext|> becomes a single token, resulting in exactly 3 tokens
+      expect(tokens.length).to eq(3)
+      expect(tokens).to eq(encoding.encode(text_with_special, allowed_special: ["<|endoftext|>"]))
+      expect(encoding.decode(tokens)).to eq(text_with_special)
     end
   end
 end
