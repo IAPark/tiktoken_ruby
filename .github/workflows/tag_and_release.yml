@@ -29,3 +29,4 @@ jobs:
       prepare: ${{ github.event_name == 'push' }}
       release: ${{ github.event_name == 'workflow_dispatch' || ((github.event.pull_request.merged == true) && (contains(github.event.pull_request.labels.*.name, 'release'))) }}
       oidc_role_to_assume: rg_oidc_akr_3jwh8zr6mroh6nafxc7s
+      include_musl: true
