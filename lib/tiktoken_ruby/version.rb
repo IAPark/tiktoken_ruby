@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module Tiktoken
-  VERSION = "0.0.15"
+  VERSION = "0.0.15.1"
 end
