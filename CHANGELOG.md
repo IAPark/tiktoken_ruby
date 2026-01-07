@@ -1,3 +1,9 @@
+# [v0.0.15.1] - 07-01-2026
+## What's Changed
+* Re-release 0.0.15 for mistakenly yanked gems by @gjtorikian in https://github.com/IAPark/tiktoken_ruby/pull/105
+
+
+**Full Changelog**: https://github.com/IAPark/tiktoken_ruby/compare/v0.0.15...v0.0.15.1
 # [v0.0.15] - 06-01-2026
 ## What's Changed
 * No longer true by @gjtorikian in https://github.com/IAPark/tiktoken_ruby/pull/96
