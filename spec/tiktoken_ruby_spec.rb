@@ -21,6 +21,21 @@ RSpec.describe Tiktoken do
     expect(Tiktoken.encoding_for_model("o3")).to be_a(Tiktoken::Encoding)
   end
 
+  {
+    "gpt-5" => :o200k_base,
+    "gpt-5-mini" => :o200k_base,
+    "gpt-5.4" => :o200k_base,
+    "gpt-5.4-mini" => :o200k_base,
+    "gpt-5.3-codex" => :o200k_base,
+    "gpt-5.2-pro" => :o200k_base,
+    "codex-mini" => :o200k_base,
+    "codex-mini-latest" => :o200k_base
+  }.each do |model, expected|
+    it "maps #{model} to #{expected}" do
+      expect(Tiktoken.encoding_for_model(model)).to eq(Tiktoken.get_encoding(expected))
+    end
+  end
+
   it "fails gracefully when getting an encoding for an unknown model" do
     expect(Tiktoken.encoding_for_model("bad-model-name")).to be_nil
   end
