@@ -79,6 +79,7 @@ module Tiktoken
       o3: "o200k_base",
       "o4-mini": "o200k_base",
       # chat
+      "gpt-5": "o200k_base",
       "gpt-4.1": "o200k_base",
       "chatgpt-4o": "o200k_base",
       "gpt-4o": "o200k_base",
@@ -136,7 +137,9 @@ module Tiktoken
       "o3-": "o200k_base",
       "o4-": "o200k_base",
       # chat
+      "gpt-5.": "o200k_base", # e.g., gpt-5.4, gpt-5.4-mini, gpt-5.3-codex, gpt-5.2-pro
       "gpt-5-": "o200k_base",
+      "codex-mini": "o200k_base", # e.g., codex-mini, codex-mini-latest
       "gpt-4.5-": "o200k_base",
       "gpt-4.1-": "o200k_base",
       "chatgpt-4o-": "o200k_base",
