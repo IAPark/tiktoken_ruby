@@ -1,3 +1,14 @@
+# [v0.0.16] - 02-05-2026
+## What's Changed
+* Bump rb-sys from 0.9.123 to 0.9.124 in the cargo group by @dependabot[bot] in https://github.com/IAPark/tiktoken_ruby/pull/107
+* Bump the bundler-dependencies group with 2 updates by @dependabot[bot] in https://github.com/IAPark/tiktoken_ruby/pull/108
+* Bump standard from 1.53.0 to 1.54.0 in the bundler-dependencies group by @dependabot[bot] in https://github.com/IAPark/tiktoken_ruby/pull/109
+* Bump the cargo group across 1 directory with 2 updates by @dependabot[bot] in https://github.com/IAPark/tiktoken_ruby/pull/113
+* Bump the bundler-dependencies group across 1 directory with 2 updates by @dependabot[bot] in https://github.com/IAPark/tiktoken_ruby/pull/114
+* bump version to 0.0.16 by @gjtorikian in https://github.com/IAPark/tiktoken_ruby/pull/115
+
+
+**Full Changelog**: https://github.com/IAPark/tiktoken_ruby/compare/v0.0.15.1...v0.0.16
 # [v0.0.15.1] - 07-01-2026
 ## What's Changed
 * Re-release 0.0.15 for mistakenly yanked gems by @gjtorikian in https://github.com/IAPark/tiktoken_ruby/pull/105
