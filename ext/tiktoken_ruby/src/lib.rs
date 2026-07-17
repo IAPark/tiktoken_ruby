@@ -34,7 +34,7 @@ fn module() -> Result<RModule, magnus::Error> {
     Ruby::get().unwrap().define_module("Tiktoken")
 }
 
-fn uncicode_error() -> Result<ExceptionClass, magnus::Error> {
+fn unicode_error() -> Result<ExceptionClass, magnus::Error> {
     module()?.define_error(
         "UnicodeError",
         Ruby::get().unwrap().exception_standard_error(),
@@ -44,6 +44,10 @@ fn uncicode_error() -> Result<ExceptionClass, magnus::Error> {
 #[magnus::init]
 fn init() -> Result<(), Error> {
     let module = module()?;
+
+    // Define Tiktoken::UnicodeError eagerly so the constant exists as soon as
+    // the extension is loaded, rather than only after the first decode error.
+    unicode_error()?;
 
     let factory_module = module.define_module("BpeFactory")?;
     factory_module.define_singleton_method("r50k_base", function!(r50k_base, 0))?;
@@ -67,5 +71,6 @@ fn init() -> Result<(), Error> {
     )?;
 
     bpe_class.define_method("decode", method!(CoreBPEWrapper::decode, 1))?;
+    bpe_class.define_method("decode_bytes", method!(CoreBPEWrapper::decode_bytes, 1))?;
     Ok(())
 }

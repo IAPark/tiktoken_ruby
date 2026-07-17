@@ -3,7 +3,7 @@ use std::ffi::c_void;
 
 use tiktoken_rs::Rank;
 
-use crate::uncicode_error;
+use crate::unicode_error;
 
 #[magnus::wrap(class = "Tiktoken::Ext::CoreBPE")]
 pub struct CoreBPEWrapper {
@@ -35,6 +35,12 @@ struct DecodeData {
     result: Result<String, String>,
 }
 
+struct DecodeBytesData {
+    core_bpe: *const tiktoken_rs::CoreBPE,
+    ids: Vec<Rank>,
+    result: Result<Vec<u8>, String>,
+}
+
 unsafe extern "C" fn encode_ordinary_without_gvl(data: *mut c_void) -> *mut c_void {
     let data = &mut *(data as *mut EncodeOrdinaryData);
     let core_bpe = &*data.core_bpe;
@@ -61,6 +67,13 @@ unsafe extern "C" fn decode_without_gvl(data: *mut c_void) -> *mut c_void {
     let data = &mut *(data as *mut DecodeData);
     let core_bpe = &*data.core_bpe;
     data.result = core_bpe.decode(&data.ids).map_err(|e| e.to_string());
+    std::ptr::null_mut()
+}
+
+unsafe extern "C" fn decode_bytes_without_gvl(data: *mut c_void) -> *mut c_void {
+    let data = &mut *(data as *mut DecodeBytesData);
+    let core_bpe = &*data.core_bpe;
+    data.result = core_bpe.decode_bytes(&data.ids).map_err(|e| e.to_string());
     std::ptr::null_mut()
 }
 
@@ -150,12 +163,45 @@ impl CoreBPEWrapper {
         }
 
         data.result.map_err(|e| {
-            let error = match uncicode_error() {
+            let error = match unicode_error() {
                 Ok(error) => error,
                 Err(e) => return e,
             };
 
             magnus::Error::new(error, e)
         })
+    }
+
+    pub fn decode_bytes(&self, ids: Vec<Rank>) -> Result<magnus::RString, magnus::Error> {
+        let mut data = DecodeBytesData {
+            core_bpe: &self.core_bpe as *const _,
+            ids,
+            result: Err(String::new()),
+        };
+
+        unsafe {
+            rb_sys::rb_thread_call_without_gvl(
+                Some(decode_bytes_without_gvl),
+                &mut data as *mut _ as *mut c_void,
+                None,
+                std::ptr::null_mut(),
+            );
+        }
+
+        // Build the Ruby string only after the GVL has been re-acquired.
+        // `str_from_slice` yields an ASCII-8BIT (binary) string, so the bytes
+        // are handed back verbatim without any UTF-8 validation. We hold the
+        // GVL here (this is called from Ruby), so `Ruby::get` cannot fail.
+        let ruby = magnus::Ruby::get().unwrap();
+        data.result
+            .map(|bytes| ruby.str_from_slice(&bytes))
+            .map_err(|e| {
+                let error = match unicode_error() {
+                    Ok(error) => error,
+                    Err(e) => return e,
+                };
+
+                magnus::Error::new(error, e)
+            })
     }
 }

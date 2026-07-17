@@ -77,6 +77,65 @@ RSpec.describe Tiktoken do
     end
   end
 
+  describe "decoding truncated multi-byte characters" do
+    let(:encoding) { Tiktoken.encoding_for_model("gpt-4o") }
+
+    # An emoji is 4 bytes spread across several tokens, so truncating the token
+    # array leaves a prefix that is not valid UTF-8.
+    let(:tokens) { encoding.encode("🦄") }
+    let(:truncated) { tokens.first(tokens.length - 1) }
+
+    it "encodes the emoji across multiple tokens" do
+      expect(tokens.length).to be > 1
+    end
+
+    it "raises Tiktoken::UnicodeError on invalid UTF-8 by default" do
+      expect { encoding.decode(truncated) }
+        .to raise_error(Tiktoken::UnicodeError)
+    end
+
+    it "raises Tiktoken::UnicodeError with an explicit errors: :strict" do
+      expect { encoding.decode(truncated, errors: :strict) }
+        .to raise_error(Tiktoken::UnicodeError)
+    end
+
+    it "replaces invalid UTF-8 with the replacement character with errors: :replace" do
+      result = encoding.decode(truncated, errors: :replace)
+      expect(result.encoding).to eq(Encoding::UTF_8)
+      expect(result).to include("\u{FFFD}")
+    end
+
+    it "does not raise with errors: :replace" do
+      expect { encoding.decode(truncated, errors: :replace) }.not_to raise_error
+    end
+
+    it "raises ArgumentError for an unknown errors mode" do
+      expect { encoding.decode(truncated, errors: :bogus) }
+        .to raise_error(ArgumentError)
+    end
+
+    it "still round-trips valid tokens exactly" do
+      expect(encoding.decode(tokens)).to eq("🦄")
+    end
+
+    describe "#decode_bytes" do
+      it "returns the raw bytes as an ASCII-8BIT string" do
+        bytes = encoding.decode_bytes(truncated)
+        expect(bytes.encoding).to eq(Encoding::ASCII_8BIT)
+      end
+
+      it "returns bytes that are a valid prefix of the full encoding" do
+        prefix = encoding.decode_bytes(truncated)
+        full = encoding.decode_bytes(tokens)
+        expect(full.b).to start_with(prefix.b)
+      end
+
+      it "round-trips valid tokens to UTF-8 bytes" do
+        expect(encoding.decode_bytes(tokens).force_encoding(Encoding::UTF_8)).to eq("🦄")
+      end
+    end
+  end
+
   describe "special token handling" do
     let(:encoding) { Tiktoken.get_encoding("cl100k_base") }
     let(:text_with_special) { "Hello<|endoftext|>World" }
