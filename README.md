@@ -17,9 +17,7 @@ If bundler is not being used to manage dependencies, install the gem by executin
 
 ## Usage
 
-Usage should be very similar to the python library. Here's a simple example
-
-Encode and decode text
+Encode and decode text:
 
 ```ruby
 require 'tiktoken_ruby'
@@ -27,7 +25,7 @@ enc = Tiktoken.get_encoding("cl100k_base")
 enc.decode(enc.encode("hello world")) #=> "hello world"
 ```
 
-Encoders can also be retrieved by model name
+Encoders can also be retrieved by model name:
 
 ```ruby
 require 'tiktoken_ruby'
@@ -68,6 +66,27 @@ enc.encode_with_special_tokens(text)
 ```
 
 All methods round-trip correctly through `decode`.
+
+### Decoding methods
+
+- `decode(tokens, errors: :strict)` - Decodes tokens back into a UTF-8 string
+- `decode_bytes(tokens)` - Decodes tokens into their raw bytes (an `ASCII-8BIT` string), without UTF-8 validation
+
+Because BPE tokens are byte-level, a single character (an emoji, or non-Latin scripts) can span multiple tokens. Truncating a token array (like, "trim text to N tokens") can leave a prefix that is not valid UTF-8. The `errors:` option controls how those invalid sequences are handled.
+
+```ruby
+enc = Tiktoken.encoding_for_model("gpt-4o")
+tokens = enc.encode("🦄") # the emoji spans multiple tokens
+
+# :strict (default) - raise Tiktoken::UnicodeError on invalid UTF-8
+enc.decode(tokens.first(2))                    #=> raises Tiktoken::UnicodeError
+
+# :replace - substitute invalid sequences with "�" (matches Python tiktoken's default)
+enc.decode(tokens.first(2), errors: :replace)  #=> "�"
+
+# decode_bytes - get the raw bytes and handle them yourself
+enc.decode_bytes(tokens.first(2))              #=> "\xF0\x9F\xA6" (ASCII-8BIT)
+```
 
 ## Development
 

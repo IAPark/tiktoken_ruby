@@ -47,11 +47,41 @@ class Tiktoken::Encoding
     @ext_base_bpe.encode_with_special_tokens(text)
   end
 
-  # Decodes the tokens back into text
+  # Decodes the tokens back into text.
+  #
+  # BPE tokens are byte-level, so a single character (an emoji, non-Latin
+  # scripts) can span multiple tokens. Truncating a token array to a limit can
+  # therefore leave a prefix that is not valid UTF-8. The +errors+ option
+  # controls how those invalid byte sequences are handled:
+  #
+  # * +:strict+ (default) - raise Tiktoken::UnicodeError on invalid UTF-8.
+  # * +:replace+ - substitute each invalid sequence with the Unicode replacement
+  #   character (U+FFFD, +�+), matching Python tiktoken's default behavior.
+  #
   # @param tokens [Array<Integer>] The tokens to decode
-  # @return [String] The decoded text
-  def decode(tokens)
-    @ext_base_bpe.decode(tokens)
+  # @param errors [Symbol] How to handle invalid UTF-8 (:strict or :replace)
+  # @return [String] The decoded text (UTF-8)
+  def decode(tokens, errors: :strict)
+    case errors
+    when :strict
+      @ext_base_bpe.decode(tokens)
+    when :replace
+      decode_bytes(tokens).force_encoding(Encoding::UTF_8).scrub("\u{FFFD}")
+    else
+      raise ArgumentError, "errors must be :strict or :replace, got #{errors.inspect}"
+    end
+  end
+
+  # Decodes the tokens back into their raw bytes, without any UTF-8 validation.
+  #
+  # The returned string has ASCII-8BIT (binary) encoding and is not guaranteed
+  # to be valid UTF-8 — useful when you want to handle invalid sequences
+  # yourself. Matches Python tiktoken's +decode_bytes+.
+  #
+  # @param tokens [Array<Integer>] The tokens to decode
+  # @return [String] The decoded bytes (ASCII-8BIT)
+  def decode_bytes(tokens)
+    @ext_base_bpe.decode_bytes(tokens)
   end
 
   private
