@@ -20,7 +20,7 @@ struct EncodeData {
     core_bpe: *const tiktoken_rs::CoreBPE,
     text: String,
     allowed_special: HashSet<String>,
-    result: Vec<Rank>,
+    result: Result<Vec<Rank>, String>,
 }
 
 struct EncodeSpecialData {
@@ -46,7 +46,13 @@ unsafe extern "C" fn encode_without_gvl(data: *mut c_void) -> *mut c_void {
     let data = &mut *(data as *mut EncodeData);
     let core_bpe = &*data.core_bpe;
     let allowed_special: HashSet<&str> = data.allowed_special.iter().map(|s| s.as_str()).collect();
-    data.result = core_bpe.encode(&data.text, &allowed_special).0;
+    // tiktoken-rs 0.12.0 made `encode` fallible, returning
+    // `Result<(Vec<Rank>, usize), EncodeError>`. Keep only the token vector and
+    // surface any tokenization failure to Ruby.
+    data.result = core_bpe
+        .encode(&data.text, &allowed_special)
+        .map(|(tokens, _last_piece_token_len)| tokens)
+        .map_err(|e| e.to_string());
     std::ptr::null_mut()
 }
 
@@ -99,7 +105,7 @@ impl CoreBPEWrapper {
             core_bpe: &self.core_bpe as *const _,
             text,
             allowed_special: HashSet::from_iter(allowed_special),
-            result: Vec::new(),
+            result: Ok(Vec::new()),
         };
 
         unsafe {
@@ -111,7 +117,9 @@ impl CoreBPEWrapper {
             );
         }
 
-        Ok(data.result)
+        data.result.map_err(|e| {
+            magnus::Error::new(magnus::Ruby::get().unwrap().exception_runtime_error(), e)
+        })
     }
 
     pub fn encode_with_special_tokens(&self, text: String) -> Vec<Rank> {
