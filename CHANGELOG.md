@@ -1,3 +1,13 @@
+# [v0.0.17] - 18-07-2026
+## What's Changed
+* Bump the github-actions group with 2 updates by @dependabot[bot] in https://github.com/IAPark/tiktoken_ruby/pull/119
+* Bump the bundler-dependencies group across 1 directory with 2 updates by @dependabot[bot] in https://github.com/IAPark/tiktoken_ruby/pull/121
+* Bump the cargo group across 1 directory with 2 updates by @dependabot[bot] in https://github.com/IAPark/tiktoken_ruby/pull/120
+* feat(decode): Add opt-in lossy mode and decode_bytes by @gjtorikian in https://github.com/IAPark/tiktoken_ruby/pull/123
+* Bump version to 0.0.17 by @gjtorikian in https://github.com/IAPark/tiktoken_ruby/pull/124
+
+
+**Full Changelog**: https://github.com/IAPark/tiktoken_ruby/compare/v0.0.16...v0.0.17
 # [v0.0.16] - 02-05-2026
 ## What's Changed
 * Bump rb-sys from 0.9.123 to 0.9.124 in the cargo group by @dependabot[bot] in https://github.com/IAPark/tiktoken_ruby/pull/107
