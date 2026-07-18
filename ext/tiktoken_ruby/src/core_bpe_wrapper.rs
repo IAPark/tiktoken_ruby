@@ -46,9 +46,7 @@ unsafe extern "C" fn encode_without_gvl(data: *mut c_void) -> *mut c_void {
     let data = &mut *(data as *mut EncodeData);
     let core_bpe = &*data.core_bpe;
     let allowed_special: HashSet<&str> = data.allowed_special.iter().map(|s| s.as_str()).collect();
-    // tiktoken-rs 0.12.0 made `encode` fallible, returning
-    // `Result<(Vec<Rank>, usize), EncodeError>`. Keep only the token vector and
-    // surface any tokenization failure to Ruby.
+    // Keep only the token vector and surface any tokenization failure to Ruby.
     data.result = core_bpe
         .encode(&data.text, &allowed_special)
         .map(|(tokens, _last_piece_token_len)| tokens)
